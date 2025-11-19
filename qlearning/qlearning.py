@@ -99,10 +99,9 @@ class QLearning:
         obtainedRewards = []
 
         for timeIndex in range(timeSteps):
-            print(timeIndex)
             # select greedy actions
-            actionInStateS = np.random.choice(np.where(self.QMatrix[self.return_index_state(currentState)] == np.max(
-                self.QMatrix[self.return_index_state(currentState)]))[0])
+            actionInStateS = np.random.choice(np.where(self.QMatrix[self.return_index_state(currentState)] ==
+                                                       np.max(self.QMatrix[self.return_index_state(currentState)]))[0])
             currentState, reward, terminated, truncated, info = env1.step(actionInStateS)
             obtainedRewards.append(reward)
             time.sleep(0.05)
@@ -111,9 +110,28 @@ class QLearning:
                 break
         return obtainedRewards, env1
 
+    def simulate_random_strategy(self):
+        env2 = gym.make('CartPole-v1')
+        (currentState, _) = env2.reset()
+        env2.render()
+        # number of simulation episodes
+        episodeNumber = 100
+        # time steps in every episode
+        timeSteps = 1000
+        # sum of rewards in each episode
+        sumRewardsEpisodes = []
 
-
-
+        for episodeIndex in range(episodeNumber):
+            rewardsSingleEpisode = []
+            initial_state = env2.reset()
+            for timeIndex in range(timeSteps):
+                random_action = env2.action_space.sample()
+                observation, reward, terminated, truncated, info = env2.step(random_action)
+                rewardsSingleEpisode.append(reward)
+                if (terminated):
+                    break
+            sumRewardsEpisodes.append(np.sum(rewardsSingleEpisode))
+        return sumRewardsEpisodes, env2
 
 
 
